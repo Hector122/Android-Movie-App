@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">hector-castillo---hector122---2020-3-2-movies-app</string>
+    <string name="app_name">Movies App</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_favorites">Favorites</string>
 </resources>
