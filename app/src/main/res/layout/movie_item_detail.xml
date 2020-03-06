@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical">
+
+    <include
+        android:id="@+id/movie_container"
+        layout="@layout/movie_item" />
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="X-Men 2"
+        android:textSize="24sp"
+        app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+
+    <TextView
+        android:id="@+id/text_overview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="When Cecilia's abusive ex takes his own life and leaves her his fortune, she suspects his death was a hoax. As a series of coincidences turn lethal, Cecilia works to prove that she is being hunted by someone nobody can see."
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/image_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_24px" />
+
+    <TextView
+        android:id="@+id/text_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="10.0"
+        app:layout_constraintLeft_toLeftOf="@id/image_start" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
