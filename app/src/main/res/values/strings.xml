@@ -2,6 +2,4 @@
     <string name="app_name">Movies App</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_favorites">Favorites</string>
-
-    <string name="url_testing">https://api.themoviedb.org/3/movie/now_playing?api_key=c9040ca82260ace0ea4a99bbcb665308</string>
 </resources>

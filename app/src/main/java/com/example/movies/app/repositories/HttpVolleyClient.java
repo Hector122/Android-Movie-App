@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.model.client;
+package com.example.movies.app.repositories;
 
 import android.content.Context;
 
@@ -8,12 +8,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.movies.app.R;
 
 /**
  * Singleton Class for make the http request
  */
 public class HttpVolleyClient {
+    private static final String API_KEY = "c9040ca82260ace0ea4a99bbcb665308";
+    private static final String URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=";
+
     private static HttpVolleyClient sInstance;
     private Context mContext;
     private RequestQueue mRequestQueue;
@@ -50,6 +52,11 @@ public class HttpVolleyClient {
         return sInstance;
     }
 
+    /**
+     * Get request queue is this create isn;t create a new one.
+     *
+     * @return RequestQueue
+     */
     private RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the
@@ -60,13 +67,13 @@ public class HttpVolleyClient {
     }
 
     /**
-     * Make the http request to GET the JSON data from the server.
+     * Make the http request to GET the JSON movies data  from the server.
      *
      * @param onReposeReceiveData callback interface with action to make.
      */
-    public void getRatesValuesFromServer(final OnReposeReceiveData onReposeReceiveData) {
-        //RequestQueue queue = Volley.newRequestQueue(context);
-        String url = mContext.getString(R.string.url_testing);//TODO: testing api.
+    public void getNowPlayingMoviesFromServer(final OnReposeReceiveData onReposeReceiveData) {
+       // RequestQueue queue = Volley.newRequestQueue(context);
+        String url = URL + API_KEY;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

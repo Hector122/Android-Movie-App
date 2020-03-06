@@ -4,16 +4,15 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.movies.app.models.Movies;
+
+import java.util.List;
+
 public class DashboardViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<List<Movies>> mMovies;
 
-    public DashboardViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is the dashboard fragment"); //TODO:
-    }
-
-    public LiveData<String> getText() {
-        return mText;
+    public LiveData<List<Movies>> getMovies() {
+        return mMovies;
     }
 }
