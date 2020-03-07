@@ -4,25 +4,23 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.movies.app.R;
+import com.example.movie.app.R;
 import com.example.movies.app.adapter.RecyclerAdapter;
-import com.example.movies.app.models.Movies;
+import com.example.movies.app.models.Movie;
 
 import java.util.List;
 
 public class DashboardFragment extends Fragment {
-
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
     private ProgressBar progressBar;
@@ -36,20 +34,31 @@ public class DashboardFragment extends Fragment {
         recyclerView = view.findViewById(R.id.recycler_view_dashboard);
         progressBar = view.findViewById(R.id.progress_bar);
 
-        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
-        dashboardViewModel.getMovies().observe(this, new Observer<List<Movies>>() {
-            @Override
-            public void onChanged(List<Movies> movies) {
-                adapter.notifyDataSetChanged();
-            }
-        });
-        
-        initializeRecyclerView();
-
         return view;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
+
+        dashboardViewModel.initialize(getContext());
+
+        dashboardViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+
+        initializeRecyclerView();
+
+    }
+
     private void initializeRecyclerView() {
+        List<Movie> testDelete = dashboardViewModel.getMovies().getValue();
+
         adapter = new RecyclerAdapter(getContext(), dashboardViewModel.getMovies().getValue());
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));

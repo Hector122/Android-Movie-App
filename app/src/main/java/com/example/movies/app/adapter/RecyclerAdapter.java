@@ -10,8 +10,9 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.movies.app.R;
-import com.example.movies.app.models.Movies;
+import com.example.movies.app.models.Movie;
 
 import java.util.List;
 
@@ -19,13 +20,13 @@ import java.util.List;
  * Adapter tho show the movie content
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private List<Movies> mMoviesDataSource;
-    private Context mContext;
+    private List<Movie> movieDataSource;
+    private Context context;
 
 
-    public RecyclerAdapter(Context context, List<Movies> moviesDataSource) {
-        this.mContext = context;
-        this.mMoviesDataSource = moviesDataSource;
+    public RecyclerAdapter(Context context, List<Movie> movieDataSource) {
+        this.context = context;
+        this.movieDataSource = movieDataSource;
     }
 
     @NonNull
@@ -37,12 +38,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        final Movie movie = movieDataSource.get(position);
+
+        Glide.with(context).load(movie.getPosterUrl())
+                .into(holder.imagePoster);
+
+        holder.buttonFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: implement favorite list.
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
-        return mMoviesDataSource.size();
+        return movieDataSource.size();
     }
 
     /**

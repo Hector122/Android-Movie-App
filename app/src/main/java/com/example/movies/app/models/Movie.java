@@ -6,13 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Movies Holder class
+ * Movie Holder class
  */
-public class Movies implements Parcelable {
+public class Movie implements Parcelable {
     @SerializedName("original_title")
     private String originalTitle;
     @SerializedName("poster_path")
-    private String posterPath;
+    private String posterUrl;
     @SerializedName("overview")
     private String overview;
     @SerializedName("release_date")
@@ -28,32 +28,52 @@ public class Movies implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.originalTitle);
-        dest.writeString(this.posterPath);
+        dest.writeString(this.posterUrl);
         dest.writeString(this.overview);
         dest.writeString(this.releaseDate);
         dest.writeString(this.rating);
     }
 
-    public Movies() {
+    public Movie() {
     }
 
-    protected Movies(Parcel in) {
+    protected Movie(Parcel in) {
         this.originalTitle = in.readString();
-        this.posterPath = in.readString();
+        this.posterUrl = in.readString();
         this.overview = in.readString();
         this.releaseDate = in.readString();
         this.rating = in.readString();
     }
 
-    public static final Creator<Movies> CREATOR = new Creator<Movies>() {
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
         @Override
-        public Movies createFromParcel(Parcel source) {
-            return new Movies(source);
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
         }
 
         @Override
-        public Movies[] newArray(int size) {
-            return new Movies[size];
+        public Movie[] newArray(int size) {
+            return new Movie[size];
         }
     };
+
+    public String getOriginalTitle() {
+        return originalTitle;
+    }
+
+    public String getPosterUrl() {
+        return posterUrl;
+    }
+
+    public String getOverview() {
+        return overview;
+    }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
+
+    public String getRating() {
+        return rating;
+    }
 }

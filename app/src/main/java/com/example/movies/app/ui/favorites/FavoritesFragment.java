@@ -12,7 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.movies.app.R;
+import com.example.movie.app.R;
+
 
 public class FavoritesFragment extends Fragment {
 
