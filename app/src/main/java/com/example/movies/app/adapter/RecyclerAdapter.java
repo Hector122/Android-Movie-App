@@ -1,5 +1,6 @@
 package com.example.movies.app.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,18 @@ import com.example.movies.app.models.Movies;
 
 import java.util.List;
 
+/**
+ * Adapter tho show the movie content
+ */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    private List<Movies> moviesDataSource;
+    private List<Movies> mMoviesDataSource;
+    private Context mContext;
+
+
+    public RecyclerAdapter(Context context, List<Movies> moviesDataSource) {
+        this.mContext = context;
+        this.mMoviesDataSource = moviesDataSource;
+    }
 
     @NonNull
     @Override
@@ -31,7 +42,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return moviesDataSource.size();
+        return mMoviesDataSource.size();
     }
 
     /**
