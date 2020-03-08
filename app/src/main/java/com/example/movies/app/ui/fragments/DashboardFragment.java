@@ -1,4 +1,4 @@
-package com.example.movies.app.ui.dashboard;
+package com.example.movies.app.ui.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,11 +17,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movie.app.R;
 import com.example.movies.app.OnItemClickListener;
-import com.example.movies.app.SharedViewModel;
 import com.example.movies.app.adapter.RecyclerAdapter;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.models.MovieComparator;
-import com.example.movies.app.ui.detail.DetailActivity;
+import com.example.movies.app.ui.acitivitys.DetailActivity;
+import com.example.movies.app.ui.SharedViewModel;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +33,6 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
     private SharedViewModel sharedViewModel;
     private Button buttonYear, buttonTitle, buttonRating;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -43,7 +42,6 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         buttonYear = view.findViewById(R.id.btn_year);
         return view;
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,7 +67,6 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
     }
-
 
     @Override
     public void onClick(Movie movie) {

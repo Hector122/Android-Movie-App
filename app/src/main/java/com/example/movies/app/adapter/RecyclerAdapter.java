@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -45,7 +44,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         final Movie movie = movieDataSource.get(position);
 
         Glide.with(context)
-                .load((movie.getPosterUrl()))
+                .load((movie.getPosterUr()))
                 .apply(new RequestOptions().fitCenter())
                 .into(holder.imagePoster);
 

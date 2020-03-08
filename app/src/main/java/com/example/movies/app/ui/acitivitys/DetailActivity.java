@@ -1,12 +1,13 @@
-package com.example.movies.app.ui.detail;
+package com.example.movies.app.ui.acitivitys;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NavUtils;
 
 import com.bumptech.glide.Glide;
 import com.example.movie.app.R;
@@ -18,10 +19,11 @@ public class DetailActivity extends AppCompatActivity {
     private TextView rating, overview, movieTitle, releaseYear;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imagePoster = findViewById(R.id.image_movie_poster);
         releaseYear = findViewById(R.id.text_release_date);
@@ -30,6 +32,7 @@ public class DetailActivity extends AppCompatActivity {
         rating = findViewById(R.id.text_rating);
 
         initializeActivity();
+
     }
 
     private void initializeActivity() {
@@ -42,8 +45,19 @@ public class DetailActivity extends AppCompatActivity {
             releaseYear.setText(movie.getReleaseDate());
 
             Glide.with(DetailActivity.this)
-                    .load(movie.getPosterUrl())
+                    .load(movie.getPosterUrlMediumSize())
                     .into(imagePoster);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }

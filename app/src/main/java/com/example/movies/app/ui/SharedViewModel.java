@@ -1,4 +1,4 @@
-package com.example.movies.app;
+package com.example.movies.app.ui;
 
 import android.content.Context;
 
@@ -16,11 +16,10 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> movies;
     private MutableLiveData<Boolean> downloadingMovies = new MediatorLiveData<>();
 
-    void initialize(Context context) {
+   public void initialize(Context context) {
         if (movies != null) {
             return;
         }
-
         downloadingMovies.setValue(true);
 
         HttpVolleyClient client = HttpVolleyClient.getInstance(context);

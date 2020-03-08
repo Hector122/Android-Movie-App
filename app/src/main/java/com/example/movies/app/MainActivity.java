@@ -15,9 +15,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.movie.app.R;
+import com.example.movies.app.ui.SharedViewModel;
 import com.example.movies.app.models.Movie;
-import com.example.movies.app.ui.dashboard.DashboardFragment;
-import com.example.movies.app.ui.favorites.FavoritesFragment;
+import com.example.movies.app.ui.fragments.DashboardFragment;
+import com.example.movies.app.ui.fragments.FavoritesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;

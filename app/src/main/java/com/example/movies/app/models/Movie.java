@@ -37,10 +37,12 @@ public class Movie implements Parcelable, Comparable<Movie> {
         return originalTitle;
     }
 
-    public String getPosterUrl() {
-        //.load("http://image.tmdb.org/t/p/w185/" + movie.getPosterUrl())
-        //"https://image.tmdb.org/t/p/w154/
+    public String getPosterUr() {
         return "https://image.tmdb.org/t/p/w154/" + posterUrl;
+    }
+
+    public String getPosterUrlMediumSize() {
+        return "https://image.tmdb.org/t/p/w342/" + posterUrl;
     }
 
     public String getOverview() {
