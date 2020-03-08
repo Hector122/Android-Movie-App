@@ -43,9 +43,7 @@ public class MainActivity extends AppCompatActivity
         sharedViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-               //TODO:
-                int size = movies.size();
-                Log.i("SIZE in Main: ", String.valueOf(size));
+
             }
         });
 

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.movie.app.R;
+import com.example.movies.app.OnClickFavoriteButtonIcon;
 import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.models.Movie;
 
@@ -25,11 +26,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private Context context;
     private List<Movie> movieDataSource;
     private OnItemClickListener onItemClickListener;
+    private OnClickFavoriteButtonIcon onClickFavoriteButtonIcon;
 
-    public RecyclerAdapter(Context context, List<Movie> movieDataSource, OnItemClickListener onItemClickListener) {
+    public RecyclerAdapter(Context context, List<Movie> movieDataSource,
+                           OnItemClickListener onItemClickListener,
+                           OnClickFavoriteButtonIcon onClickFavoriteButtonIcon) {
         this.context = context;
         this.movieDataSource = movieDataSource;
         this.onItemClickListener = onItemClickListener;
+        this.onClickFavoriteButtonIcon = onClickFavoriteButtonIcon;
     }
 
     @NonNull
@@ -56,8 +61,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.buttonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                movie.setFavorite(!movie.isFavorite());
-                notifyItemChanged(position);
+                onClickFavoriteButtonIcon.onClickButtonIcon(movie, position);
             }
         });
 
