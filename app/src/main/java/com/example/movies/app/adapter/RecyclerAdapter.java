@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.movie.app.R;
 import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.models.Movie;
@@ -42,11 +44,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         final Movie movie = movieDataSource.get(position);
 
-        Glide.with(context).load(movie.getPosterUrl())
+        Glide.with(context)
+                .load((movie.getPosterUrl()))
+                .apply(new RequestOptions().fitCenter())
                 .into(holder.imagePoster);
 
         int imageResource = movie.isFavorite() ? R.drawable.ic_favorite_black_24dp
                 : R.drawable.ic_favorite_border_24px;
+
         holder.buttonFavorite.setBackgroundResource(imageResource);
         // set the image.
         holder.buttonFavorite.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +74,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public int getItemCount() {
         return movieDataSource.size();
+    }
+
+    /**
+     * Notify that data set has changed
+     *
+     * @param dataSource List with the new data to show.
+     */
+    public void notifyDataSetChanged(final List<Movie> dataSource) {
+        movieDataSource = dataSource;
+        this.notifyDataSetChanged();
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.example.movies.app;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -12,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.example.movie.app.R;
 import com.example.movies.app.models.Movie;
@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity
         sharedViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
+               //TODO:
+                int size = movies.size();
+                Log.i("SIZE in Main: ", String.valueOf(size));
             }
         });
 

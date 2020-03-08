@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,19 +16,23 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movie.app.R;
-import com.example.movies.app.SharedViewModel;
 import com.example.movies.app.OnItemClickListener;
+import com.example.movies.app.SharedViewModel;
 import com.example.movies.app.adapter.RecyclerAdapter;
 import com.example.movies.app.models.Movie;
+import com.example.movies.app.models.MovieComparator;
 import com.example.movies.app.ui.detail.DetailActivity;
 
+import java.util.Collections;
 import java.util.List;
 
 public class DashboardFragment extends Fragment implements OnItemClickListener, View.OnClickListener {
+    private List<Movie> moviesData;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
     private SharedViewModel sharedViewModel;
     private Button buttonYear, buttonTitle, buttonRating;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,16 +53,15 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         sharedViewModel.getMovies().observe(requireActivity(), new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
-                adapter.notifyDataSetChanged();
+                moviesData = movies;
+                initializeRecyclerView();
             }
         });
-        
+
         Button[] buttons = {buttonYear, buttonTitle, buttonRating};
         for (Button button : buttons) {
             button.setOnClickListener(this);
         }
-
-        initializeRecyclerView();
     }
 
     private void initializeRecyclerView() {
@@ -72,24 +74,30 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
     @Override
     public void onClick(Movie movie) {
         Intent intent = new Intent(getContext(), DetailActivity.class);
-        intent.putExtra("MOVIE", movie);
+        intent.putExtra(DetailActivity.MOVIE_DATA, movie);
         getContext().startActivity(intent);
     }
 
     @Override
     public void onClick(View v) {
+        MovieComparator movieComparator = null;
+
         switch (v.getId()) {
             case R.id.btn_rating:
-
+                movieComparator = MovieComparator.RATING;
                 break;
             case R.id.btn_title:
-
+                movieComparator = MovieComparator.TITLE;
                 break;
             case R.id.btn_year:
-
+                movieComparator = MovieComparator.YEAR;
                 break;
         }
 
-        adapter.notifyDataSetChanged();
+        for (int i = 0; i < moviesData.size(); i++) {
+            moviesData.get(i).setMovieComparator(movieComparator);
+        }
+        Collections.sort(moviesData);
+        adapter.notifyDataSetChanged(moviesData);
     }
 }

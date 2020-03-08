@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Movie Holder class
  */
-public class Movie implements Parcelable {
+public class Movie implements Parcelable, Comparable<Movie> {
     @SerializedName("id")
     private long id;
     @SerializedName("original_title")
@@ -23,8 +23,10 @@ public class Movie implements Parcelable {
     private String rating;
 
     private boolean favorite;
+    private MovieComparator movieComparator;
 
     public Movie() {
+        movieComparator = MovieComparator.TITLE;
     }
 
     public long getId() {
@@ -36,7 +38,9 @@ public class Movie implements Parcelable {
     }
 
     public String getPosterUrl() {
-        return posterUrl;
+        //.load("http://image.tmdb.org/t/p/w185/" + movie.getPosterUrl())
+        //"https://image.tmdb.org/t/p/w154/
+        return "https://image.tmdb.org/t/p/w154/" + posterUrl;
     }
 
     public String getOverview() {
@@ -57,6 +61,14 @@ public class Movie implements Parcelable {
 
     public void setFavorite(boolean value) {
         this.favorite = value;
+    }
+
+    public MovieComparator getMovieComparator() {
+        return movieComparator;
+    }
+
+    public void setMovieComparator(MovieComparator movieComparator) {
+        this.movieComparator = movieComparator;
     }
 
     @Override
@@ -94,4 +106,19 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
+    @Override
+    public int compareTo(Movie o) {
+        switch (movieComparator) {
+            case YEAR:
+                return this.getReleaseDate().compareTo(o.getReleaseDate());
+
+            case RATING:
+                return this.getRating().compareTo(o.getRating());
+
+            case TITLE:
+            default:
+                return this.getOriginalTitle().compareTo(o.getOriginalTitle());
+        }
+    }
 }

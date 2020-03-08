@@ -7,16 +7,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
+import com.bumptech.glide.Glide;
 import com.example.movie.app.R;
 import com.example.movies.app.models.Movie;
 
 public class DetailActivity extends AppCompatActivity {
+    public static final String MOVIE_DATA = "com.example.movie-app";
     private ImageView imagePoster;
     private TextView rating, overview, movieTitle, releaseYear;
-    private DetailViewModel detailViewModel;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
@@ -30,20 +29,11 @@ public class DetailActivity extends AppCompatActivity {
         movieTitle = findViewById(R.id.text_title);
         rating = findViewById(R.id.text_rating);
 
-
-        detailViewModel = ViewModelProviders.of(this).get(DetailViewModel.class);
-        detailViewModel.getMovies().observe(this, new Observer<Movie>() {
-            @Override
-            public void onChanged(Movie movie) {
-
-            }
-        });
-
-        initalizeView();
+        initializeActivity();
     }
 
-    private void initalizeView() {
-        Movie movie = getIntent().getParcelableExtra("MOVIE");
+    private void initializeActivity() {
+        Movie movie = getIntent().getParcelableExtra(MOVIE_DATA);
 
         if (movie != null) {
             rating.setText(movie.getRating());
@@ -51,7 +41,9 @@ public class DetailActivity extends AppCompatActivity {
             movieTitle.setText(movie.getOriginalTitle());
             releaseYear.setText(movie.getReleaseDate());
 
-            //TODO: image loading.
+            Glide.with(DetailActivity.this)
+                    .load(movie.getPosterUrl())
+                    .into(imagePoster);
         }
     }
 }
