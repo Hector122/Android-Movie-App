@@ -42,12 +42,18 @@ public class DetailActivity extends AppCompatActivity {
         initalizeView();
     }
 
-    private void initalizeView(){
-        Movie movie = detailViewModel.getMovies().getValue();
+    private void initalizeView() {
+        Movie movie = getIntent().getParcelableExtra("MOVIE");
 
+        if (movie != null) {
+            rating.setText(movie.getRating());
+            overview.setText(movie.getOverview());
+            movieTitle.setText(movie.getOriginalTitle());
+            releaseYear.setText(movie.getReleaseDate());
+
+            //TODO: image loading.
+        }
     }
-
-
 }
 
 

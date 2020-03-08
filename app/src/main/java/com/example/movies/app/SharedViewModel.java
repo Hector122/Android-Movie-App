@@ -1,4 +1,4 @@
-package com.example.movies.app.ui.dashboard;
+package com.example.movies.app;
 
 import android.content.Context;
 
@@ -12,10 +12,8 @@ import com.example.movies.app.repositories.HttpVolleyClient;
 
 import java.util.List;
 
-public class DashboardViewModel extends ViewModel {
-
+public class SharedViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> movies;
-    private HttpVolleyClient client;
     private MutableLiveData<Boolean> downloadingMovies = new MediatorLiveData<>();
 
     void initialize(Context context) {
@@ -25,7 +23,7 @@ public class DashboardViewModel extends ViewModel {
 
         downloadingMovies.setValue(true);
 
-        client = HttpVolleyClient.getInstance(context);
+        HttpVolleyClient client = HttpVolleyClient.getInstance(context);
         movies = client.getNowPlayingMoviesFromServer();
 
         downloadingMovies.setValue(false);

@@ -5,17 +5,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.Button;
+import android.widget.Switch;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movie.app.R;
+import com.example.movies.app.SharedViewModel;
 import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.adapter.RecyclerAdapter;
 import com.example.movies.app.models.Movie;
@@ -23,57 +25,49 @@ import com.example.movies.app.ui.detail.DetailActivity;
 
 import java.util.List;
 
-public class DashboardFragment extends Fragment implements OnItemClickListener {
+public class DashboardFragment extends Fragment implements OnItemClickListener, View.OnClickListener {
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
-    private ProgressBar progressBar;
-
-    private DashboardViewModel dashboardViewModel;
+    private SharedViewModel sharedViewModel;
+    private Button buttonYear, buttonTitle, buttonRating;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
-
         recyclerView = view.findViewById(R.id.recycler_view_dashboard);
-        progressBar = view.findViewById(R.id.progress_bar);
-
+        buttonRating = view.findViewById(R.id.btn_rating);
+        buttonTitle = view.findViewById(R.id.btn_title);
+        buttonYear = view.findViewById(R.id.btn_year);
         return view;
     }
 
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        dashboardViewModel = ViewModelProviders.of(this).get(DashboardViewModel.class);
-
-        dashboardViewModel.initialize(getContext());
-
-        dashboardViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        sharedViewModel.getMovies().observe(requireActivity(), new Observer<List<Movie>>() {
             @Override
             public void onChanged(List<Movie> movies) {
                 adapter.notifyDataSetChanged();
             }
         });
-
-        dashboardViewModel.isDownloadingMovies().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean value) {
-                if (value) {
-                    showProgressBar();
-                } else {
-                    hideProgressBar();
-                }
-            }
-        });
+        
+        Button[] buttons = {buttonYear, buttonTitle, buttonRating};
+        for (Button button : buttons) {
+            button.setOnClickListener(this);
+        }
 
         initializeRecyclerView();
     }
 
     private void initializeRecyclerView() {
-        adapter = new RecyclerAdapter(getContext(), dashboardViewModel.getMovies().getValue(), this);
+        adapter = new RecyclerAdapter(getContext(), sharedViewModel.getMovies().getValue(), this);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
     }
+
 
     @Override
     public void onClick(Movie movie) {
@@ -82,11 +76,20 @@ public class DashboardFragment extends Fragment implements OnItemClickListener {
         getContext().startActivity(intent);
     }
 
-    private void showProgressBar() {
-        this.progressBar.setVisibility(View.VISIBLE);
-    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_rating:
 
-    private void hideProgressBar() {
-        this.progressBar.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.btn_title:
+
+                break;
+            case R.id.btn_year:
+
+                break;
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }

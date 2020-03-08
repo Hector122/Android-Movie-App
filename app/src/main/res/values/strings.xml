@@ -3,4 +3,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_favorites">Favorites</string>
     <string name="ok">OK</string>
+    <string name="order_by">Order by</string>
+    <string name="name">Name</string>
+    <string name="year">Year</string>
+    <string name="rating">Rating</string>
 </resources>
