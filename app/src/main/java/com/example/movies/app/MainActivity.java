@@ -1,17 +1,24 @@
 package com.example.movies.app;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.movie.app.R;
+import com.example.movies.app.ui.dashboard.DashboardFragment;
+import com.example.movies.app.ui.favorites.FavoritesFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements BottomNavigationView.OnNavigationItemSelectedListener {
+    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
+    // private MainViewModel mainViewModel;
+    private ActionBar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,14 +26,42 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navView = findViewById(R.id.bottom_nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_dashboard, R.id.navigation_favorite).build();
+        toolbar = getSupportActionBar();
+        toolbar.setTitle(getString(R.string.title_dashboard));
+        loadFragment(new DashboardFragment());
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+        onNavigationItemSelectedListener = this;
+
+        BottomNavigationView navigationView = findViewById(R.id.bottom_nav_view);
+        navigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
+    }
+
+    /**
+     * @param fragment
+     */
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.nav_host_fragment, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment fragment;
+        switch (menuItem.getItemId()) {
+            case R.id.navigation_dashboard:
+                fragment = new DashboardFragment();
+                loadFragment(fragment);
+                toolbar.setTitle(getString(R.string.title_dashboard));
+                return true;
+
+            case R.id.navigation_favorite:
+                fragment = new FavoritesFragment();
+                loadFragment(fragment);
+                toolbar.setTitle(getString(R.string.title_favorites));
+                return true;
+        }
+        return false;
     }
 }

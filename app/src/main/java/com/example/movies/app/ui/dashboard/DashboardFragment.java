@@ -1,5 +1,6 @@
 package com.example.movies.app.ui.dashboard;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,12 +16,14 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movie.app.R;
+import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.adapter.RecyclerAdapter;
 import com.example.movies.app.models.Movie;
+import com.example.movies.app.ui.detail.DetailActivity;
 
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements OnItemClickListener {
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
     private ProgressBar progressBar;
@@ -52,18 +55,31 @@ public class DashboardFragment extends Fragment {
             }
         });
 
-        initializeRecyclerView();
+        dashboardViewModel.isDownloadingMovies().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                if (value) {
+                    showProgressBar();
+                } else {
+                    hideProgressBar();
+                }
+            }
+        });
 
+        initializeRecyclerView();
     }
 
     private void initializeRecyclerView() {
-        List<Movie> testDelete = dashboardViewModel.getMovies().getValue();
-
-        adapter = new RecyclerAdapter(getContext(), dashboardViewModel.getMovies().getValue());
-
+        adapter = new RecyclerAdapter(getContext(), dashboardViewModel.getMovies().getValue(), this);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
+    }
 
+    @Override
+    public void onClick(Movie movie) {
+        Intent intent = new Intent(getContext(), DetailActivity.class);
+        intent.putExtra("MOVIE", movie);
+        getContext().startActivity(intent);
     }
 
     private void showProgressBar() {
