@@ -14,7 +14,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.movie.app.R;
-import com.example.movies.app.ui.SharedViewModel;
+import com.example.movies.app.ui.models.SharedViewModel;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.ui.fragments.DashboardFragment;
 import com.example.movies.app.ui.fragments.FragmentType;

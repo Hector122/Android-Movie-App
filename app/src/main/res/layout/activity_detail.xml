@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/container_date_and_rating"
                 android:layout_marginTop="@dimen/liner_layout_vertical_margin"
-                android:textSize="12sp" />
+                android:textSize="16sp" />
         </RelativeLayout>
 
     </ScrollView>

@@ -1,17 +1,16 @@
-package com.example.movies.app.ui;
+package com.example.movies.app.ui.models;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.movie.app.R;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.repositories.HttpVolleyClient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SharedViewModel extends ViewModel {
@@ -33,8 +32,6 @@ public class SharedViewModel extends ViewModel {
         HttpVolleyClient client = HttpVolleyClient.getInstance(context);
         movies = client.getNowPlayingMoviesFromServer();
 
-        favoriteMoviesFromPreference(context);
-
         downloadingMovies.setValue(false);
     }
 
@@ -48,42 +45,23 @@ public class SharedViewModel extends ViewModel {
 
     public void addToFavoriteList(final Movie movie) {
         List<Movie> currentMovies = favoriteMovies.getValue();
-        if (currentMovies != null)
-            currentMovies.add(movie);
+        if (currentMovies == null) {
+            currentMovies = new ArrayList<>();
+        }
 
+        currentMovies.add(movie);
         favoriteMovies.postValue(currentMovies);
     }
 
     public void removeFromFavoriteList(final Movie movie) {
         List<Movie> currentMovies = favoriteMovies.getValue();
-
         if (currentMovies != null) {
             currentMovies.remove(movie);
+            favoriteMovies.postValue(currentMovies);
         }
-        favoriteMovies.postValue(currentMovies);
     }
 
     public LiveData<Boolean> isDownloadingMovies() {
         return downloadingMovies;
-    }
-
-    /**
-     * @param context Application Context
-     */
-    private void favoriteMoviesFromPreference(Context context) {
-
-            if (movies != null && movies.getValue() != null) {
-                SharedPreferences sharedPref = context.getSharedPreferences(
-                        context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-                List<Movie> temp = movies.getValue();
-                for (Movie movie : temp) {
-                    if (movie.getId() == sharedPref.getLong(String.valueOf(movie.getId()), 0)) {
-                        temp.add(movie);
-                    }
-                }
-
-                favoriteMovies.setValue(temp);
-            }
     }
 }
