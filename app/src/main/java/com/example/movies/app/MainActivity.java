@@ -24,7 +24,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private static final String FRAGMENT_TYPE = "com.example.movie.app.FRAGMENT_TYPE";
+    public static final String FRAGMENT_TYPE = "com.example.movie.app.FRAGMENT_TYPE";
     private SharedViewModel sharedViewModel;
     private ProgressBar progressBar;
     private ActionBar toolbar;

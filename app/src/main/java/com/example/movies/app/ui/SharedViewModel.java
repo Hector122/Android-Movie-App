@@ -12,12 +12,11 @@ import com.example.movie.app.R;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.repositories.HttpVolleyClient;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SharedViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> movies;
-    private MutableLiveData<List<Movie>> favoriteMovies;
+    private MutableLiveData<List<Movie>> favoriteMovies = new MediatorLiveData<>();
     private MutableLiveData<Boolean> downloadingMovies = new MediatorLiveData<>();
 
     /**
@@ -72,22 +71,19 @@ public class SharedViewModel extends ViewModel {
      * @param context Application Context
      */
     private void favoriteMoviesFromPreference(Context context) {
-        favoriteMovies = new MutableLiveData<>();
 
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+            if (movies != null && movies.getValue() != null) {
+                SharedPreferences sharedPref = context.getSharedPreferences(
+                        context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        if (movies != null && movies.getValue() != null) {
-
-            List<Movie> favorite = new ArrayList<>();
-
-            for (Movie movie : movies.getValue()) {
-                String value = String.valueOf(movie.getId());
-                if (movie.getId() == sharedPref.getLong(value, 0)) {
-                    favorite.add(movie);
+                List<Movie> temp = movies.getValue();
+                for (Movie movie : temp) {
+                    if (movie.getId() == sharedPref.getLong(String.valueOf(movie.getId()), 0)) {
+                        temp.add(movie);
+                    }
                 }
+
+                favoriteMovies.setValue(temp);
             }
-            favoriteMovies.setValue(favorite);
-        }
     }
 }

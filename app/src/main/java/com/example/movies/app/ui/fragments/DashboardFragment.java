@@ -1,5 +1,6 @@
 package com.example.movies.app.ui.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -18,19 +20,21 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.movie.app.R;
-import com.example.movies.app.OnClickFavoriteButtonIcon;
+import com.example.movies.app.MainActivity;
+import com.example.movies.app.OnClickFavoriteButtonListener;
 import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.adapter.RecyclerAdapter;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.models.MovieComparator;
 import com.example.movies.app.ui.acitivitys.DetailActivity;
 import com.example.movies.app.ui.SharedViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
 import java.util.List;
 
 public class DashboardFragment extends Fragment implements OnItemClickListener, View.OnClickListener,
-        OnClickFavoriteButtonIcon {
+        OnClickFavoriteButtonListener {
     private List<Movie> moviesData;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
@@ -38,19 +42,21 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
     private Button buttonYear, buttonTitle, buttonRating;
     private TextView textEmptyMessage;
     private FragmentType fragmentType;
+    //  private CoordinatorLayout coordinatorLayout;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        //coordinatorLayout = view.findViewById(R.id.coordinator_snack_bar);
         recyclerView = view.findViewById(R.id.recycler_view_dashboard);
         textEmptyMessage = view.findViewById(R.id.text_notifications);
         buttonRating = view.findViewById(R.id.btn_rating);
         buttonTitle = view.findViewById(R.id.btn_title);
         buttonYear = view.findViewById(R.id.btn_year);
 
-        String valor = getArguments() != null ? getArguments().getString("X") : FragmentType.FAVORITE_MOVIES.toString();
-        fragmentType = FragmentType.valueOf(valor);
-
+        if (getArguments() != null) {
+            fragmentType = FragmentType.valueOf((String) getArguments().get(MainActivity.FRAGMENT_TYPE));
+        }
 
         return view;
     }
@@ -65,6 +71,8 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
             sharedViewModel.getFavoriteMovies().observe(requireActivity(), new Observer<List<Movie>>() {
                 @Override
                 public void onChanged(List<Movie> movies) {
+
+
                     moviesData = movies;
                     initializeRecyclerView();
                 }
@@ -81,8 +89,9 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
     }
 
     private void initializeRecyclerView() {
-        if (moviesData == null || moviesData.isEmpty()) {
+        if (moviesData == null) {
             textEmptyMessage.setVisibility(View.VISIBLE);
+            textEmptyMessage.setText(getString(R.string.no_favorite));
             return;
         }
 
@@ -119,18 +128,18 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
 
         if (movie.isFavorite()) {
             editor.putLong(String.valueOf(movie.getId()), movie.getId());
-            sharedViewModel.addToFavoriteList(movie);
+            // sharedViewModel.addToFavoriteList(movie);
         } else {
             editor.remove(String.valueOf(movie.getId()));
-            sharedViewModel.removeFromFavoriteList(movie);
+            //  sharedViewModel.removeFromFavoriteList(movie);
         }
 
         editor.commit();
 
         adapter.notifyItemChanged(position);
 
-//        Snackbar.make(getView().findViewById(R.id.coordinator_snack_bar), movie.isFavorite() ? getString(R.string.add_to_favorites)
-//                : getString(R.string.remove_from_favorites), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(getActivity().findViewById(R.id.container), movie.isFavorite() ? getString(R.string.add_to_favorites)
+                : getString(R.string.remove_from_favorites), Snackbar.LENGTH_SHORT).show();
     }
 
     @Override

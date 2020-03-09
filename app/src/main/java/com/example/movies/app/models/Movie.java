@@ -3,6 +3,8 @@ package com.example.movies.app.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -65,10 +67,6 @@ public class Movie implements Parcelable, Comparable<Movie> {
         this.favorite = value;
     }
 
-    public MovieComparator getMovieComparator() {
-        return movieComparator;
-    }
-
     public void setMovieComparator(MovieComparator movieComparator) {
         this.movieComparator = movieComparator;
     }
@@ -110,17 +108,17 @@ public class Movie implements Parcelable, Comparable<Movie> {
     };
 
     @Override
-    public int compareTo(Movie o) {
+    public int compareTo(@NonNull Movie movie) {
         switch (movieComparator) {
             case YEAR:
-                return this.getReleaseDate().compareTo(o.getReleaseDate());
+                return this.getReleaseDate().compareTo(movie.getReleaseDate());
 
             case RATING:
-                return this.getRating().compareTo(o.getRating());
+                return this.getRating().compareTo(movie.getRating());
 
             case TITLE:
             default:
-                return this.getOriginalTitle().compareTo(o.getOriginalTitle());
+                return this.getOriginalTitle().compareTo(movie.getOriginalTitle());
         }
     }
 }

@@ -22,7 +22,9 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         imagePoster = findViewById(R.id.image_movie_poster);
         releaseYear = findViewById(R.id.text_release_date);
@@ -31,7 +33,6 @@ public class DetailActivity extends AppCompatActivity {
         rating = findViewById(R.id.text_rating);
 
         initializeActivity();
-
     }
 
     /**

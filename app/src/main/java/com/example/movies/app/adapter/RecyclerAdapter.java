@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.movie.app.R;
-import com.example.movies.app.OnClickFavoriteButtonIcon;
+import com.example.movies.app.OnClickFavoriteButtonListener;
 import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.models.Movie;
 
@@ -27,15 +27,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private Context context;
     private List<Movie> movieDataSource;
     private OnItemClickListener onItemClickListener;
-    private OnClickFavoriteButtonIcon onClickFavoriteButtonIcon;
+    private OnClickFavoriteButtonListener onClickFavoriteButtonListener;
 
     public RecyclerAdapter(Context context, List<Movie> movieDataSource,
                            OnItemClickListener onItemClickListener,
-                           OnClickFavoriteButtonIcon onClickFavoriteButtonIcon) {
+                           OnClickFavoriteButtonListener onClickFavoriteButtonListener) {
         this.context = context;
         this.movieDataSource = movieDataSource;
         this.onItemClickListener = onItemClickListener;
-        this.onClickFavoriteButtonIcon = onClickFavoriteButtonIcon;
+        this.onClickFavoriteButtonListener = onClickFavoriteButtonListener;
     }
 
     @NonNull
@@ -64,7 +64,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.buttonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickFavoriteButtonIcon.onClickButtonIcon(movie, position);
+                onClickFavoriteButtonListener.onClickButtonIcon(movie, position);
             }
         });
 
