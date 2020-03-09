@@ -20,6 +20,11 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<List<Movie>> favoriteMovies;
     private MutableLiveData<Boolean> downloadingMovies = new MediatorLiveData<>();
 
+    /**
+     * Set the MutableLive data with the notification.
+     *
+     * @param context Application Context.
+     */
     public void initialize(Context context) {
         if (movies != null) {
             return;
@@ -29,21 +34,7 @@ public class SharedViewModel extends ViewModel {
         HttpVolleyClient client = HttpVolleyClient.getInstance(context);
         movies = client.getNowPlayingMoviesFromServer();
 
-        SharedPreferences sharedPref = context.getSharedPreferences(
-                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-
-        if (movies != null && movies.getValue() != null) {
-            List<Movie> favorite = new ArrayList<>();
-
-            for (Movie movie : movies.getValue()) {
-                String value = String.valueOf(movie.getId());
-                if (movie.getId() == sharedPref.getLong(value, 0)) {
-                    favorite.add(movie);
-                }
-            }
-            favoriteMovies = new MutableLiveData<>();
-            favoriteMovies.postValue(favorite);
-        }
+        favoriteMoviesFromPreference(context);
 
         downloadingMovies.setValue(false);
     }
@@ -52,11 +43,51 @@ public class SharedViewModel extends ViewModel {
         return movies;
     }
 
-    public LiveData<List<Movie>> getfavoriteMovies() {
+    public LiveData<List<Movie>> getFavoriteMovies() {
         return favoriteMovies;
+    }
+
+    public void addToFavoriteList(final Movie movie) {
+        List<Movie> currentMovies = favoriteMovies.getValue();
+        if (currentMovies != null)
+            currentMovies.add(movie);
+
+        favoriteMovies.postValue(currentMovies);
+    }
+
+    public void removeFromFavoriteList(final Movie movie) {
+        List<Movie> currentMovies = favoriteMovies.getValue();
+
+        if (currentMovies != null) {
+            currentMovies.remove(movie);
+        }
+        favoriteMovies.postValue(currentMovies);
     }
 
     public LiveData<Boolean> isDownloadingMovies() {
         return downloadingMovies;
+    }
+
+    /**
+     * @param context Application Context
+     */
+    private void favoriteMoviesFromPreference(Context context) {
+        favoriteMovies = new MutableLiveData<>();
+
+        SharedPreferences sharedPref = context.getSharedPreferences(
+                context.getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+
+        if (movies != null && movies.getValue() != null) {
+
+            List<Movie> favorite = new ArrayList<>();
+
+            for (Movie movie : movies.getValue()) {
+                String value = String.valueOf(movie.getId());
+                if (movie.getId() == sharedPref.getLong(value, 0)) {
+                    favorite.add(movie);
+                }
+            }
+            favoriteMovies.setValue(favorite);
+        }
     }
 }

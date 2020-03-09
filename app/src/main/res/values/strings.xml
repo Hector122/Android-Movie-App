@@ -7,7 +7,7 @@
     <string name="name">Name</string>
     <string name="year">Year</string>
     <string name="rating">Rating</string>
-
+    <string name="no_favorite">No item in favorite list</string>
     <string name="add_to_favorites">Add to you favorites</string>
     <string name="remove_from_favorites">Remove from you favorites</string>
 

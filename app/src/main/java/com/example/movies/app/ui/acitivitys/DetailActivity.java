@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
 import com.bumptech.glide.Glide;
 import com.example.movie.app.R;
@@ -35,6 +34,9 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Initializer view with the data receive.
+     */
     private void initializeActivity() {
         Movie movie = getIntent().getParcelableExtra(MOVIE_DATA);
 
@@ -52,13 +54,11 @@ public class DetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                //NavUtils.navigateUpFromSameTask(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.example.movies.app;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -18,14 +17,14 @@ import com.example.movie.app.R;
 import com.example.movies.app.ui.SharedViewModel;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.ui.fragments.DashboardFragment;
-import com.example.movies.app.ui.fragments.FavoritesFragment;
+import com.example.movies.app.ui.fragments.FragmentType;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
-    private BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener;
+    private static final String FRAGMENT_TYPE = "com.example.movie.app.FRAGMENT_TYPE";
     private SharedViewModel sharedViewModel;
     private ProgressBar progressBar;
     private ActionBar toolbar;
@@ -59,10 +58,19 @@ public class MainActivity extends AppCompatActivity
         });
 
         toolbar = getSupportActionBar();
-        toolbar.setTitle(getString(R.string.title_dashboard));
-        loadFragment(new DashboardFragment());
+        if (toolbar != null) {
+            toolbar.setTitle(getString(R.string.title_dashboard));
+        }
 
-        onNavigationItemSelectedListener = this;
+        //Set Default Fragment
+        Bundle data = new Bundle();
+        data.putString(FRAGMENT_TYPE, FragmentType.ALL_MOVIES.toString());
+
+        Fragment fragment = new DashboardFragment();
+        fragment.setArguments(data);
+        loadFragment(fragment);
+
+        BottomNavigationView.OnNavigationItemSelectedListener onNavigationItemSelectedListener = this;
         BottomNavigationView navigationView = findViewById(R.id.bottom_nav_view);
         navigationView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener);
     }
@@ -72,14 +80,23 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         switch (menuItem.getItemId()) {
             case R.id.navigation_dashboard:
+                Bundle data = new Bundle();
+                data.putString(FRAGMENT_TYPE, FragmentType.ALL_MOVIES.toString());
+
                 fragment = new DashboardFragment();
+                fragment.setArguments(data);
                 loadFragment(fragment);
+
                 toolbar.setTitle(getString(R.string.title_dashboard));
                 return true;
-
             case R.id.navigation_favorite:
-                fragment = new FavoritesFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(FRAGMENT_TYPE, FragmentType.FAVORITE_MOVIES.toString());
+
+                fragment = new DashboardFragment();
+                fragment.setArguments(bundle);
                 loadFragment(fragment);
+
                 toolbar.setTitle(getString(R.string.title_favorites));
                 return true;
         }
@@ -87,7 +104,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * @param fragment
+     * Load the corresponding fragment to the container view.
+     *
+     * @param fragment Fragment to show.
      */
     private void loadFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -95,7 +114,6 @@ public class MainActivity extends AppCompatActivity
         transaction.addToBackStack(null);
         transaction.commit();
     }
-
 
     /**
      * Show progress bar in the view.

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,10 +54,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 .apply(new RequestOptions().fitCenter())
                 .into(holder.imagePoster);
 
+        holder.rating.setText(movie.getRating());
+
         int imageResource = movie.isFavorite() ? R.drawable.ic_favorite_black_24dp
                 : R.drawable.ic_favorite_border_24px;
-
         holder.buttonFavorite.setBackgroundResource(imageResource);
+
         // set the image.
         holder.buttonFavorite.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,12 +98,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imagePoster;
         Button buttonFavorite;
+        TextView rating;
 
         ViewHolder(View view) {
             super(view);
 
             imagePoster = view.findViewById(R.id.image_movie);
             buttonFavorite = view.findViewById(R.id.button_favorites);
+            rating = view.findViewById(R.id.text_rating);
         }
     }
 }
