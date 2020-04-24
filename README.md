@@ -6,7 +6,7 @@ La empresa ʻPelina Beerʼ es una industria que se encarga de informar al usuari
 
 ## Requerimientos Técnicos 
 
-Las películas están contenidas en una cuadrícula donde cada una presenta supóster más relevante, así como también, el indicador que da a conocer si lamisma pertenece a las favoritas del usuario (este indicador puede ser presionadopara agregarla o removerla de dicha cuadrícula). 
+Las películas están contenidas en una cuadrícula donde cada una presenta supóster más relevante, así como también, el indicador que da a conocer si la misma pertenece a las favoritas del usuario (este indicador puede ser presionadopara agregarla o removerla de dicha cuadrícula). 
 
 Además de la cuadrícula mencionada anteriormente, también existe otra cuadrículaqué contiene las marcadas como favoritas. Ambas están presentes en la mismapantalla, en tabs separados. 
 
@@ -24,13 +24,8 @@ Al seleccionar una película, el detalle de la misma es presentado. Este detall
 -	Calificación
 -	Indicador de favorita (puede ser presionado para agregarla o removerla de dicha cuadrícula)
 
-## Reglas 
-
--	Use la plataforma móvil en la que se sienta más confortable.
--	No haga uso de ningún framework, un buen desarrollador debe saber seleccionar sus herramientas y ponerlas a funcionar en conjunto.
--	El uso de librerías de terceros es permitido y alentado.
--	Haga uso de .gitignore, evite al máximo incluir archivos innecesarios.
--	Debe usar The Movie DB (https://www.themoviedb.org/documentation/api?language=en) como fuente externa de datos. 
+## Used WebServices
+- The Movie DB (https://www.themoviedb.org/documentation/api?language=en)  
 
 ## Criterios de Evaluación 
 
