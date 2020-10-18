@@ -8,7 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.movies.app.models.Movie;
-import com.example.movies.app.repositories.HttpVolleyClient;
+import com.example.movies.app.repositories.VolleyClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,8 @@ public class SharedViewModel extends ViewModel {
         }
         downloadingMovies.setValue(true);
 
-        HttpVolleyClient client = HttpVolleyClient.getInstance(context);
+        VolleyClient client = VolleyClient.getInstance(context);
+
         movies = client.getNowPlayingMoviesFromServer();
 
         downloadingMovies.setValue(false);
@@ -43,6 +44,11 @@ public class SharedViewModel extends ViewModel {
         return favoriteMovies;
     }
 
+    /**
+     * Add movies to the favorite list.
+     *
+     * @param movie movies.
+     */
     public void addToFavoriteList(final Movie movie) {
         List<Movie> currentMovies = favoriteMovies.getValue();
         if (currentMovies == null) {
@@ -53,6 +59,11 @@ public class SharedViewModel extends ViewModel {
         favoriteMovies.postValue(currentMovies);
     }
 
+    /**
+     * Remove movies from the favorite list.
+     *
+     * @param movie movies.
+     */
     public void removeFromFavoriteList(final Movie movie) {
         List<Movie> currentMovies = favoriteMovies.getValue();
         if (currentMovies != null) {
@@ -60,6 +71,7 @@ public class SharedViewModel extends ViewModel {
             favoriteMovies.postValue(currentMovies);
         }
     }
+
 
     public LiveData<Boolean> isDownloadingMovies() {
         return downloadingMovies;

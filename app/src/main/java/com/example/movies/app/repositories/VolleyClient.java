@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.movie.app.R;
+import com.example.movies.app.applications.ApplicationConstants;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.models.MoviesHolder;
 import com.google.gson.Gson;
@@ -24,11 +25,8 @@ import java.util.List;
 /**
  * Singleton class for make the http request with the volley library.
  */
-public class HttpVolleyClient {
-    private static final String API_KEY = "c9040ca82260ace0ea4a99bbcb665308";
-    private static final String URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=";
-
-    private static HttpVolleyClient instance;
+public class VolleyClient {
+    private static VolleyClient instance;
     private Context context;
     private RequestQueue requestQueue;
 
@@ -37,7 +35,7 @@ public class HttpVolleyClient {
      *
      * @param context application context.
      */
-    private HttpVolleyClient(Context context) {
+    private VolleyClient(Context context) {
         this.context = context;
         requestQueue = Volley.newRequestQueue(context);
         ;
@@ -49,9 +47,9 @@ public class HttpVolleyClient {
      * @param context application context.
      * @return HttpVolleyClient.
      */
-    public static synchronized HttpVolleyClient getInstance(Context context) {
+    public static synchronized VolleyClient getInstance(Context context) {
         if (instance == null) {
-            instance = new HttpVolleyClient(context);
+            instance = new VolleyClient(context);
         }
         return instance;
     }
@@ -60,7 +58,7 @@ public class HttpVolleyClient {
      * Make the http request to GET the JSON movies data  from the server.
      */
     public MutableLiveData<List<Movie>> getNowPlayingMoviesFromServer() {
-        String url = URL + API_KEY;
+        String url = ApplicationConstants.URL + ApplicationConstants.API_KEY;
         final MutableLiveData<List<Movie>> listMutableLiveData = new MutableLiveData<>();
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -77,6 +75,7 @@ public class HttpVolleyClient {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+
                         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setMessage(error.getMessage())
                                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

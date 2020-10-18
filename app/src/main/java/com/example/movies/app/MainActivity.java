@@ -25,7 +25,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements BottomNavigationView.OnNavigationItemSelectedListener {
     public static final String FRAGMENT_TYPE = "com.example.movie.app.FRAGMENT_TYPE";
-    private SharedViewModel sharedViewModel;
     private ProgressBar progressBar;
     private ActionBar toolbar;
 
@@ -37,14 +36,8 @@ public class MainActivity extends AppCompatActivity
 
         progressBar = findViewById(R.id.progress_bar);
 
-        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        SharedViewModel sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         sharedViewModel.initialize(getApplicationContext());
-        sharedViewModel.getMovies().observe(this, new Observer<List<Movie>>() {
-            @Override
-            public void onChanged(List<Movie> movies) {
-
-            }
-        });
 
         sharedViewModel.isDownloadingMovies().observe(this, new Observer<Boolean>() {
             @Override

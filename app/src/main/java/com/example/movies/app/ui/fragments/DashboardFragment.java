@@ -30,6 +30,9 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * View that show the list of all movies.
+ */
 public class DashboardFragment extends Fragment implements OnItemClickListener, View.OnClickListener,
         OnClickFavoriteButtonListener {
     private List<Movie> moviesData;
@@ -40,6 +43,7 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
     private TextView textEmptyMessage;
     private FragmentType fragmentType;
 
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
@@ -81,6 +85,9 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         }
     }
 
+    /**
+     * Initializer the recycler view.
+     */
     private void initializeRecyclerView() {
         if (moviesData == null) {
             textEmptyMessage.setVisibility(View.VISIBLE);
@@ -152,10 +159,7 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         }
 
         if (moviesData != null) {
-            for (int i = 0; i < moviesData.size(); i++) {
-                moviesData.get(i).setMovieComparator(movieComparator);
-            }
-            Collections.sort(moviesData);
+            Collections.sort(moviesData, movieComparator);
             adapter.notifyDataSetChanged(moviesData);
         }
     }
