@@ -15,7 +15,7 @@ public enum MovieComparator implements Comparator<Movie> {
                 return o1.getReleaseDate().compareTo(o2.getReleaseDate());
 
             case RATING:
-                return o1.getRating().compareTo(o2.getRating());
+                return o2.getRating().compareTo(o1.getRating());
 
             case TITLE:
             default:

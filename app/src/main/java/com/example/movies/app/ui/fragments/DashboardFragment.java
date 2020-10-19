@@ -1,12 +1,13 @@
 package com.example.movies.app.ui.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,8 +24,10 @@ import com.example.movies.app.OnItemClickListener;
 import com.example.movies.app.adapter.RecyclerAdapter;
 import com.example.movies.app.models.Movie;
 import com.example.movies.app.models.MovieComparator;
-import com.example.movies.app.ui.models.SharedViewModel;
 import com.example.movies.app.ui.acitivitys.DetailActivity;
+import com.example.movies.app.ui.models.SharedViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Collections;
@@ -33,13 +36,14 @@ import java.util.List;
 /**
  * View that show the list of all movies.
  */
-public class DashboardFragment extends Fragment implements OnItemClickListener, View.OnClickListener,
+public class DashboardFragment extends Fragment implements OnItemClickListener,
         OnClickFavoriteButtonListener {
+
     private List<Movie> moviesData;
     private RecyclerView recyclerView;
     private RecyclerAdapter adapter;
     private SharedViewModel sharedViewModel;
-    private Button buttonYear, buttonTitle, buttonRating;
+    private ChipGroup chipGroup;
     private TextView textEmptyMessage;
     private FragmentType fragmentType;
 
@@ -49,12 +53,11 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         recyclerView = view.findViewById(R.id.recycler_view_dashboard);
         textEmptyMessage = view.findViewById(R.id.text_notifications);
-        buttonRating = view.findViewById(R.id.btn_rating);
-        buttonTitle = view.findViewById(R.id.btn_title);
-        buttonYear = view.findViewById(R.id.btn_year);
+        chipGroup = view.findViewById(R.id.chip_group);
 
         if (getArguments() != null) {
-            fragmentType = FragmentType.valueOf((String) getArguments().get(MainActivity.FRAGMENT_TYPE));
+            fragmentType = FragmentType.valueOf(
+                    (String) getArguments().get(MainActivity.FRAGMENT_TYPE));
         }
 
         return view;
@@ -70,6 +73,8 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
             sharedViewModel.getFavoriteMovies().observe(requireActivity(), new Observer<List<Movie>>() {
                 @Override
                 public void onChanged(List<Movie> movies) {
+                    chipGroup.setVisibility(movies.isEmpty() ? View.INVISIBLE : View.VISIBLE);
+
                     moviesData = movies;
                     initializeRecyclerView();
                 }
@@ -83,6 +88,8 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
                 }
             });
         }
+
+        setChipGroupBehavior();
     }
 
     /**
@@ -104,19 +111,11 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        Button[] buttons = {buttonYear, buttonTitle, buttonRating};
-        for (Button button : buttons) {
-            button.setOnClickListener(this);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Button[] buttons = {buttonYear, buttonTitle, buttonRating};
-        for (Button button : buttons) {
-            button.setOnClickListener(null);
-        }
     }
 
     @Override
@@ -142,25 +141,36 @@ public class DashboardFragment extends Fragment implements OnItemClickListener, 
         getContext().startActivity(intent);
     }
 
-    @Override
-    public void onClick(View v) {
-        MovieComparator movieComparator = null;
+    /**
+     * Set the behavior for the chips group.
+     */
+    private void setChipGroupBehavior() {
 
-        switch (v.getId()) {
-            case R.id.btn_rating:
-                movieComparator = MovieComparator.RATING;
-                break;
-            case R.id.btn_title:
-                movieComparator = MovieComparator.TITLE;
-                break;
-            case R.id.btn_year:
-                movieComparator = MovieComparator.YEAR;
-                break;
-        }
+        chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(ChipGroup group, int checkedId) {
+                MovieComparator movieComparator = null;
 
-        if (moviesData != null) {
-            Collections.sort(moviesData, movieComparator);
-            adapter.notifyDataSetChanged(moviesData);
-        }
+                Chip chip = group.findViewById(checkedId);
+                if (chip == null) return;
+
+                switch (chip.getId()) {
+                    case R.id.chip_rating:
+                        movieComparator = MovieComparator.RATING;
+                        break;
+                    case R.id.chip_name:
+                        movieComparator = MovieComparator.TITLE;
+                        break;
+                    case R.id.chip_year:
+                        movieComparator = MovieComparator.YEAR;
+                        break;
+                }
+
+                if (moviesData != null) {
+                    Collections.sort(moviesData, movieComparator);
+                    adapter.notifyDataSetChanged(moviesData);
+                }
+            }
+        });
     }
 }
